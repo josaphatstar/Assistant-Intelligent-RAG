@@ -1,4 +1,4 @@
-# Assistant TOMATE — RAG local + RAG agentique
+# Assistant TOMATE : RAG local + RAG agentique
 
 Assistant technique intelligent développé avec Ollama, ChromaDB, LangChain et LangGraph.
 
