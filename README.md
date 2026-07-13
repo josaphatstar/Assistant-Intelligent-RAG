@@ -2,7 +2,7 @@
 
 Assistant technique intelligent développé avec Ollama, ChromaDB, LangChain et LangGraph.
 
-Déploiement entièrement local via Docker — aucune donnée n'est envoyée vers des serveurs externes.
+Déploiement entièrement local via Docker, aucune donnée n'est envoyée vers des serveurs externes.
 
 ## Prérequis
 
