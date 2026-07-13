@@ -14,7 +14,6 @@ Déploiement entièrement local via Docker — aucune donnée n'est envoyée ver
 
 ### 1. Cloner le dépôt
 git clone https://github.com/josaphatstar/Assistant-Intelligent-RAG
-cd assistant-tomate
 
 ### 2. Démarrer les services Docker
 docker-compose up -d
