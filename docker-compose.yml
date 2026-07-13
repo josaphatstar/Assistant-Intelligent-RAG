@@ -1,0 +1,70 @@
+# assistant-tomate/docker-compose.yml
+
+version: '3.8'
+
+services:
+
+  # SERVICE 1 : Le cerveau — LLM local
+  ollama:
+    image: ollama/ollama:latest
+    container_name: tomate-ollama
+    ports:
+      - "11434:11434"
+    volumes:
+      - ./ollama_models:/root/.ollama
+    environment:
+      - OLLAMA_KEEP_ALIVE=24h
+      - OLLAMA_NUM_THREADS=4      # Utilise 4 cœurs CPU
+    restart: unless-stopped
+
+  # SERVICE 2 : La mémoire — base vectorielle
+  chromadb:
+    image: chromadb/chroma:latest
+    container_name: tomate-chromadb
+    ports:
+      - "8001:8000"
+    volumes:
+      - ./chroma_db:/chroma/chroma
+    environment:
+      - ANONYMIZED_TELEMETRY=False
+    restart: unless-stopped
+
+  # SERVICE 3 : Le coordinateur — pipeline RAG
+  python-api:
+    build: ./src
+    container_name: tomate-api
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./src:/app
+      - ./data:/app/data
+      - ./models_cache:/root/.cache
+    depends_on:
+      - ollama
+      - chromadb
+    environment:
+      - OLLAMA_BASE_URL=http://ollama:11434
+      - CHROMA_HOST=chromadb
+      - CHROMA_PORT=8000
+    command: uvicorn main:app --host 0.0.0.0 --port 8000
+    restart: unless-stopped
+
+
+  # SERVICE 4 : Interface streamlit
+  streamlit:
+    image: python:3.11-slim
+    container_name: tomate-streamlit
+    ports:
+      - "8501:8501"
+    volumes:
+      - ./src:/app
+      - ./models_cache:/root/.cache
+    working_dir: /app
+    depends_on:
+      - python-api
+    environment:
+      - API_URL=http://python-api:8000/query
+    command: >
+      sh -c "pip install streamlit requests --quiet &&
+             streamlit run app.py --server.port 8501 --server.address 0.0.0.0"
+    restart: unless-stopped

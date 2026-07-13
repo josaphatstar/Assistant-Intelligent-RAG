@@ -1,0 +1,30 @@
+# Modèles LLM — trop volumineux, se retéléchargent
+ollama_models/
+
+# Base vectorielle — se régénère via ingestion.py
+chroma_db/
+
+# Cache HuggingFace — se retélécharge automatiquement
+models_cache/
+
+# Documents PDF — sensibles et volumineux
+data/documents/*.pdf
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+
+# Environnement
+.env
+.env.local
+
+# OS
+.DS_Store
+Thumbs.db
+
+# VS Code
+.vscode/
