@@ -46,6 +46,9 @@ services:
       - OLLAMA_BASE_URL=http://ollama:11434
       - CHROMA_HOST=chromadb
       - CHROMA_PORT=8000
+      - TRANSFORMERS_OFFLINE=1        # ← HuggingFace ne contacte plus le réseau
+      - HF_DATASETS_OFFLINE=1         # ← idem pour les datasets
+      - HF_HUB_OFFLINE=1              # ← idem pour le hub
     command: uvicorn main:app --host 0.0.0.0 --port 8000
     restart: unless-stopped
 
